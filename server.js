@@ -6,6 +6,10 @@ http.createServer((request, response) => {
     let addr = url.parse(request.url, true);
     let filePath = "";
 
+    fs.appendFile("log.txt", `Timestamp: ${new Date().toUTCString()}; URL: ${request.url}\n`, (err) => {
+        err ? console.log(err) : console.log("Log entry created");
+    }) 
+
     if (addr.pathname.includes("documentation")) {
         filePath = __dirname + "/documentation.html"
     } else {
