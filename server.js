@@ -12,8 +12,12 @@ http.createServer((request, response) => {
         filePath = "index.html";
     }
 
-    response.writeHead(200, {contentType: "text/plain"});
-    response.end("Hello Node!");
+    fs.readFile(filePath, (err, data) => {
+        if (err) throw err;
+        response.writeHead(200, {contentType: "text/html"});
+        response.write(data);
+        response.end();
+    });
 
 }).listen(8080);
 
