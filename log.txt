@@ -1,2 +1,7 @@
-Timestamp: Wed, 01 Feb 2023 17:52:41 GMT; URL: /
-Timestamp: Wed, 01 Feb 2023 17:53:12 GMT; URL: /documentation
+
+::ffff:127.0.0.1 - - [10/Feb/2023:20:51:08 +0000] "GET / HTTP/1.1" 200 29 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0"
+::ffff:127.0.0.1 - - [10/Feb/2023:20:51:08 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0"
+::ffff:127.0.0.1 - - [10/Feb/2023:20:51:59 +0000] "GET / HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0"
+::ffff:127.0.0.1 - - [10/Feb/2023:20:52:22 +0000] "GET /documentation.html HTTP/1.1" 200 589 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0"
+::ffff:127.0.0.1 - - [10/Feb/2023:20:52:39 +0000] "GET /movies HTTP/1.1" 200 782 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0"
+::ffff:127.0.0.1 - - [10/Feb/2023:20:53:17 +0000] "GET /test HTTP/1.1" 404 143 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0"
