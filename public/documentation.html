@@ -8,6 +8,40 @@
 </head>
 <body>
     <h1>Movie API Documentation</h1>
-    <p>This API returns a movie list to the user.</p>
+    <p>This REST API serves a movie database</p>
+    <p>The following list shows the features of the API:</p>
+    <ul>
+        <li>Return a list of all movies to the user</li>
+        <li>Return data (description, genre, director, image URL, whether it's featured or not) about a single movie by title to the user</li>
+        <li>Return data about a genre (description) by name/title (e.g., “Thriller”)</li>
+        <li>Return data about a director (bio, birth year, death year) by name</li>
+        <li>Allow new users to register</li>
+        <li>Allow users to update their user info (username)</li>
+        <li>Allow users to add a movie to their list of favorites</li>
+        <li>Allow users to remove a movie from their list of favorites</li>
+        <li>Allow existing users to deregister</li>
+    </ul>
+    <p>The following table specifies the URL endpoints of the API.</p>
+    <table>
+        <caption>Movie API database URL endpoints</caption>
+        <thead>
+            <tr>
+                <th>Business Logic</th>
+                <th>URL</th>
+                <th>HTTP Method</th>
+                <th>Request body data format</th>
+                <th>Response body data format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Get a list of all movies</td>
+                <td>/movies</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>A JSON object holding data about all movies</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
