@@ -1,7 +1,16 @@
 [
     {
         "title": "Avatar",
-        "year": 2009
+        "year": 2009,
+        "genre": {
+            "name": "Science fiction",
+            "description": "Science fiction (sometimes shortened to sci-fi) is a genre of speculative fiction, which typically deals with imaginative and futuristic concepts such as advanced science and technology, space exploration, time travel, parallel universes, and extraterrestrial life."
+        },
+        "director": {
+            "name": "James Cameron",
+            "bio": "James Cameron is a critically acclaimed film director known for some of the biggest box-office hits of all time. A science-fiction fan as a child, he went on to produce and direct films including The Terminator, Aliens and Avatar.",
+            "birth": 1954
+        }
     },
     {
         "title": "Avengers: Endgame",
