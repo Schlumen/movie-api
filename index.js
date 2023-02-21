@@ -22,6 +22,7 @@ app.use(morgan("combined", {stream: accessLogStream}));
 app.use(express.static("public"));
 // Turn on body-parser to read JSON from req-body
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 let movies = JSON.parse(fs.readFileSync("movies.json"));
 let users = [
