@@ -120,7 +120,7 @@ app.put("/users/:username", (req, res) => {
             username: req.body.username,
             password: req.body.password,
             email: req.body.email,
-            birthday: req.body.birthday
+            birthdate: req.body.birthdate
         }
     }, { new: true }, (err, updatedUser) => {
         if (err) {
