@@ -24,6 +24,10 @@ app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Use Cross-Origin Resource Sharing
+const cors = require("cors");
+app.use(cors());
+
 // Require passport module and import auth.js and passport.js
 let auth = require("./auth")(app);
 const passport = require("passport");
