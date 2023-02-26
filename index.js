@@ -146,10 +146,12 @@ app.put("/users/:oldusername", [
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
+
+    let hashedPassword = Users.hashPassword(req.body.password);
     Users.findOneAndUpdate({ username: req.params.oldusername }, {
         $set: {
             username: req.body.username,
-            password: req.body.password,
+            password: hashedPassword,
             email: req.body.email,
             birthdate: req.body.birthdate
         }
