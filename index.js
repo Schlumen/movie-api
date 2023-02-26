@@ -136,8 +136,17 @@ app.post("/users", [
 });
 
 // UPDATE a users info by username
-app.put("/users/:username", passport.authenticate("jwt", { session: false }), (req, res) => {
-    Users.findOneAndUpdate({ username: req.params.username }, {
+app.put("/users/:oldusername", [
+    check("username", "username needs to have at least 5 characters").isLength({ min: 5 }),
+    check("username", "username contains non alphanumeric characters").isAlphanumeric(),
+    check("password", "password is required").not().isEmpty(),
+    check("email", "email does not appear to be valid").isEmail()
+], passport.authenticate("jwt", { session: false }), (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+    Users.findOneAndUpdate({ username: req.params.oldusername }, {
         $set: {
             username: req.body.username,
             password: req.body.password,
