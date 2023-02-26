@@ -201,7 +201,8 @@ app.use((err, req, res, next) => {
     res.status(500).send("Something went wrong!");
 });
 
-// Start server and listen on port 8080
-app.listen(8080, () => {
-    console.log("Server running on port 8080");
+// Start server
+const port = process.env.PORT || 8080;
+app.listen(port, "0.0.0.0", () => {
+    console.log("Listening on port " + port);
 });
