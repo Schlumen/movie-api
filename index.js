@@ -102,10 +102,12 @@ app.get("/movies/director/:directorName", passport.authenticate("jwt", { session
 
 // CREATE a new user
 app.post("/users", [
-    check("username", "username is required").isLength({ min: 5 }),
+    check("username", "username needs to have at least 5 characters").isLength({ min: 5 }),
     check("username", "username contains non alphanumeric characters").isAlphanumeric(),
     check("password", "password is required").not().isEmpty(),
-    check("email", "email does not appear to be valid").isEmail()
+    check("password", "password needs to have at least 8 characters").isLength({ min: 8 }),
+    check("email", "email does not appear to be valid").isEmail(),
+    check("birthdate", "birthdate must be a date").isDate()
 ], (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -140,7 +142,9 @@ app.put("/users/:oldusername", [
     check("username", "username needs to have at least 5 characters").isLength({ min: 5 }),
     check("username", "username contains non alphanumeric characters").isAlphanumeric(),
     check("password", "password is required").not().isEmpty(),
-    check("email", "email does not appear to be valid").isEmail()
+    check("password", "password needs to have at least 8 characters").isLength({ min: 8 }),
+    check("email", "email does not appear to be valid").isEmail(),
+    check("birthdate", "birthdate must be a date").isDate()
 ], passport.authenticate("jwt", { session: false }), (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
