@@ -15,8 +15,8 @@ const app = express();
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), { flags: "a" });
 
 // Connect to the mongodb database
-// mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB", { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB", { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Turn on logging
 app.use(morgan("combined", { stream: accessLogStream }));
@@ -137,7 +137,7 @@ app.post("/users", [
     });
 });
 
-// CREATE a movie
+// CREATE a movie (not documented)
 
 app.post('/movies', (req, res) => {
     // Convert comma-separated actors string into array
@@ -191,64 +191,102 @@ app.put("/users/:oldusername", [
         return res.status(422).json({ errors: errors.array() });
     }
 
-    let hashedPassword = Users.hashPassword(req.body.password);
-    Users.findOneAndUpdate({ username: req.params.oldusername }, {
-        $set: {
-            username: req.body.username,
-            password: hashedPassword,
-            email: req.body.email,
-            birthdate: req.body.birthdate
-        }
-    }, { new: true }, (err, updatedUser) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send("Error: " + err);
+    function updateUser() {
+        let hashedPassword = Users.hashPassword(req.body.password);
+        Users.findOneAndUpdate({ username: req.params.oldusername }, {
+            $set: {
+                username: req.body.username,
+                password: hashedPassword,
+                email: req.body.email,
+                birthdate: req.body.birthdate
+            }
+        }, { new: true }, (err, updatedUser) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send("Error: " + err);
+            } else {
+                res.status(200).json(updatedUser);
+            }
+        });
+    }
+
+    //Check if user is authorized
+    if (req.params.oldusername === req.user.username) {
+        //Check in case the user gives a new username if the new username already exists
+        if (req.body.username !== req.user.username) {
+            Users.findOne({ username: req.body.username }).then(user => {
+                if (user) {
+                    return res.status(400).send(req.body.username + " already exists");
+                } else {
+                    updateUser();
+                }
+            });
         } else {
-            res.json(updatedUser);
+            updateUser();
         }
-    });
+    } else {
+        res.status(500).send("Unauthorized");
+    }
+
+    
 });
 
 // CREATE a new favorite movie
 app.post("/users/:username/movies/:movieID", passport.authenticate("jwt", { session: false }), (req, res) => {
-    Users.findOneAndUpdate({ username: req.params.username }, {
-        $push: { favoriteMovies: req.params.movieID } 
-    }, { new: true }, (err, updatedUser) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send("Error: " + err);
-        } else {
-            res.json(updatedUser);
-        }
-    });
+    //Check if user is authorized
+    if (req.params.username === req.user.username) {
+        Users.findOneAndUpdate({ username: req.params.username }, {
+            $push: { favoriteMovies: req.params.movieID } 
+        }, { new: true }, (err, updatedUser) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send("Error: " + err);
+            } else {
+                res.status(200).json(updatedUser);
+            }
+        });
+    } else {
+        res.status(500).send("Unauthorized");
+    }
 });
 
 // DELETE a favorite movie
 app.delete("/users/:username/movies/:movieID", passport.authenticate("jwt", { session: false }), (req, res) => {
-    Users.findOneAndUpdate({ username: req.params.username }, {
-        $pull: { favoriteMovies: req.params.movieID } 
-    }, { new: true }, (err, updatedUser) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send("Error: " + err);
-        } else {
-            res.json(updatedUser);
-        }
-    });
+    //Check if user is authorized
+    if (req.params.username === req.user.username) {
+        Users.findOneAndUpdate({ username: req.params.username }, {
+            $pull: { favoriteMovies: req.params.movieID } 
+        }, { new: true }, (err, updatedUser) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send("Error: " + err);
+            } else {
+                res.status(200).json(updatedUser);
+            }
+        });
+
+    } else {
+        res.status(500).send("Unauthorized");
+    }
 });
 
 // DELETE a user
 app.delete("/users/:username", passport.authenticate("jwt", { session: false }), (req, res) => {
-    Users.findOneAndRemove({ username: req.params.username }).then(user => {
-        if (!user) {
-            res.status(400).send(req.params.username + " was not found");
-        } else {
-            res.status(200).send(req.params.username + " was deleted");
-        }
-    }).catch(err => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-    });
+    //Check if user is authorized
+    if (req.params.username === req.user.username) {
+        Users.findOneAndRemove({ username: req.params.username }).then(user => {
+            if (!user) {
+                res.status(400).send(req.params.username + " was not found");
+            } else {
+                res.status(200).send(req.params.username + " was deleted");
+            }
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send("Error: " + err);
+        });
+    } else {
+        res.status(500).send("Unauthorized");
+    }
 });
 
 // Error handling
