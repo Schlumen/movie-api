@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+/**
+ * Movie Schema to save movie data
+ */
+
 let movieSchema = mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
@@ -20,6 +24,10 @@ let movieSchema = mongoose.Schema({
     featured: Boolean
 });
 
+/**
+ * User Schema to save user data
+ */
+
 let userSchema = mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
@@ -29,7 +37,7 @@ let userSchema = mongoose.Schema({
 });
 
 userSchema.statics.hashPassword = password => bcrypt.hashSync(password, 10);
-userSchema.methods.validatePassword = function(password) {
+userSchema.methods.validatePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 

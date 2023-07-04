@@ -145,37 +145,37 @@ app.post('/movies', (req, res) => {
 
     // Convert featured
     const featured = req.body.featured === "on" ? true : false;
-  
+
     // Create new movie object with input data
     const newMovie = new Movies({
-      title: req.body.title,
-      description: req.body.description,
-      genre: {
-        name: req.body.genrename,
-        description: req.body.genredescription
-      },
-      director: {
-        name: req.body.directorname,
-        bio: req.body.directorbio,
-        birthyear: req.body.directorbirthyear,
-        deathyear: req.body.directordeathyear
-      },
-      actors: actors,
-      year: req.body.year,
-      imageurl: req.body.imageurl,
-      featured: featured
+        title: req.body.title,
+        description: req.body.description,
+        genre: {
+            name: req.body.genrename,
+            description: req.body.genredescription
+        },
+        director: {
+            name: req.body.directorname,
+            bio: req.body.directorbio,
+            birthyear: req.body.directorbirthyear,
+            deathyear: req.body.directordeathyear
+        },
+        actors: actors,
+        year: req.body.year,
+        imageurl: req.body.imageurl,
+        featured: featured
     });
-  
+
     // Save new movie object to MongoDB
     newMovie.save((err, movie) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error adding movie to database');
-      } else {
-        res.status(201).send(movie);
-      }
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error adding movie to database');
+        } else {
+            res.status(201).send(movie);
+        }
     });
-  });
+});
 
 // UPDATE a users info by username
 app.put("/users/:oldusername", [
@@ -190,6 +190,10 @@ app.put("/users/:oldusername", [
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
+
+    /**
+     * Update User to database
+     */
 
     function updateUser() {
         let hashedPassword = Users.hashPassword(req.body.password);
@@ -228,7 +232,7 @@ app.put("/users/:oldusername", [
         res.status(500).send("Unauthorized");
     }
 
-    
+
 });
 
 // CREATE a new favorite movie
@@ -236,7 +240,7 @@ app.post("/users/:username/movies/:movieID", passport.authenticate("jwt", { sess
     //Check if user is authorized
     if (req.params.username === req.user.username) {
         Users.findOneAndUpdate({ username: req.params.username }, {
-            $push: { favoriteMovies: req.params.movieID } 
+            $push: { favoriteMovies: req.params.movieID }
         }, { new: true }, (err, updatedUser) => {
             if (err) {
                 console.error(err);
@@ -255,7 +259,7 @@ app.delete("/users/:username/movies/:movieID", passport.authenticate("jwt", { se
     //Check if user is authorized
     if (req.params.username === req.user.username) {
         Users.findOneAndUpdate({ username: req.params.username }, {
-            $pull: { favoriteMovies: req.params.movieID } 
+            $pull: { favoriteMovies: req.params.movieID }
         }, { new: true }, (err, updatedUser) => {
             if (err) {
                 console.error(err);

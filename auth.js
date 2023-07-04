@@ -1,7 +1,13 @@
 const jwtSecret = "39028409qrfiwemqxoIAJMFD54gbqwmk";
 const jwt = require("jsonwebtoken"),
-passport = require("passport");
+    passport = require("passport");
 require("./passport");
+
+/**
+ * Generates JWT Token
+ * @param {JSON} user 
+ * @returns JWT Token
+ */
 
 let generateJWTToken = user => {
     return jwt.sign(user, jwtSecret, {
@@ -10,6 +16,11 @@ let generateJWTToken = user => {
         algorithm: "HS256"
     });
 }
+
+/**
+ * Login route and logic
+ * @param {*} router 
+ */
 
 module.exports = router => {
     router.post("/login", (req, res) => {
@@ -28,7 +39,7 @@ module.exports = router => {
 
                 let token = generateJWTToken(user.toJSON());
                 return res.json({ user, token });
-            });           
+            });
         })(req, res);
     });
 }

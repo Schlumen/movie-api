@@ -1,11 +1,15 @@
 const passport = require("passport"),
-LocalStrategy = require("passport-local").Strategy,
-Models = require("./models.js"),
-passportJWT = require("passport-jwt");
+    LocalStrategy = require("passport-local").Strategy,
+    Models = require("./models.js"),
+    passportJWT = require("passport-jwt");
 
 let Users = Models.User,
-JWTStrategy = passportJWT.Strategy,
-ExtractJWT = passportJWT.ExtractJwt;
+    JWTStrategy = passportJWT.Strategy,
+    ExtractJWT = passportJWT.ExtractJwt;
+
+/**
+ * Log in user
+ */
 
 passport.use(new LocalStrategy({
     usernameField: "username",
@@ -32,6 +36,10 @@ passport.use(new LocalStrategy({
         return callback(null, user);
     });
 }));
+
+/**
+ * Check Token for any authenticated request
+ */
 
 passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
